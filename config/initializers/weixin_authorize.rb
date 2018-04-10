@@ -1,0 +1,1 @@
+$client ||= WeixinAuthorize::Client.new('wxf489c71739afdf28', '6b27b955568af855dbaceccf4e775d26')
