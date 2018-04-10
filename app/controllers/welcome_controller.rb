@@ -5,16 +5,26 @@ class WelcomeController < ApplicationController
      "button":[
      {    
           "type": "click",
-          "name": "点赞",
-          "key": "LIKE"
+          "name": "签到",
+          "key": "SIGN_IN" 
       },
       {
            "name": "菜单",
            "sub_button": [
+            {
+              "type": "view",
+              "name": "今日热点",
+              "url": "https://www.toutiao.com/"
+              },
            {    
                "type": "view",
                "name": "搜索",
                "url": "http://www.baidu.com/"
+            },
+            {
+              "type": "view",
+              "name": "🎲损友圈",
+              "url": "http://play.wxavu.com/game/?gameid=261&share_from=msg&fuid=311379278&statid=1602&cp_from=msg&cp_shareId=41/"
             },
             {
                "type": "click",
@@ -39,11 +49,12 @@ class WelcomeController < ApplicationController
             {	
         	  "type": "click",
         	  "name": "个人中心",
-        	  "key": "KKKK"
+        	  "key": "USER"
             }]
      }
        ]
  }
+
    	response = $client.create_menu(menu) # Hash or Json
    	# 响应输出在页面显示出来
     logger.debug response 

@@ -114,23 +114,41 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       reply_text_message("Your Location: #{@lat}, #{@lgt}, #{@precision}")
     end
 
-    def handle_click_like_event(weixin_message)
+    #点击事件
+    def handle_click_sign_in_event(weixin_message)
       openid = @weixin_message.FromUserName
+      if $redis.sadd('users:sign_in', openid)
+          reply_text_message("恭喜你签到成功，积分+1")
+        else
+          reply_text_message("您已经签到过了，请明天再来")
+      end
+    end
+
+    def handle_click_like_event(weixin_message)
+      # 拿到用户ID
+      openid = @weixin_message.FromUserName
+      # 判断用户如果点赞成功,返回文本消息
       if $redis.sadd('users:like_counts', openid)
           reply_text_message("感谢您的支持，点赞数+1")
         else
+      # 否则返回你已经 点赞过了
           reply_text_message("您已经点赞过了")
       end
     end
 
     def handle_click_like_count_event(weixin_message)
       like_count = $redis.scard 'users:like_counts'
-      reply_text_message("已有#{like_count}为本站点赞")
+      reply_text_message("已有#{like_count}人为本站点赞")
     end
     # 点击联系我们事件：
     def handle_click_connect_us_event(weixin_message)
+      article = []
+      article << generate_article('title', 'desc', 'https://avatars3.githubusercontent.com/u/37606189?s=40&v=4', 'http://baidu.com')
+      article << generate_article('title', 'desc', 'https://avatars3.githubusercontent.com/u/37606189?s=40&v=4', 'http://baidu.com')
+
       # 回复图片
-      reply_image_message(generate_image("4B6erJvpc5QVRPBaU5rvQlRqbA_5g0aRDHSTyh9B-wCfmo-O25nslS-3iCogk9eR"))
+      reply_news_message(article)
+      # reply_image_message(generate_image("4B6erJvpc5QVRPBaU5rvQlRqbA_5g0aRDHSTyh9B-wCfmo-O25nslS-3iCogk9eR"))
     end
 
     # 其他点击事件
