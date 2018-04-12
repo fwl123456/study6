@@ -17,7 +17,27 @@ WeixinRailsMiddleware::WeixinController.class_eval do
   private
     # 发送文本消息响应
     def response_text_message(options={})
-      reply_text_message("Your Message: #{@keyword}")
+      case @keyword
+      when '新建文章'
+        reply_text_message("请输入文章标题:文章内容")
+      when /(.+):(.+)/
+        match = /(.+):(.+)/.match(@keyword)
+        post = Post.create(title: match[1], content: match[2])
+        reply_text_message("文章建立完成: #{post.title}:#{post.content}") 
+      when '查看文章'
+        puts Post.all.count
+        @posts = Post.all
+        @posts.each do |p|
+          puts p.title
+          $client.send_text_custom(@weixin_message.FromUserName, p.title)
+        end
+        # Post.all.each do |post|
+          reply_text_message("文章已全部发送")
+        # end
+      else
+        # 否则返回用户发的信息
+        reply_text_message("Your Message: #{@keyword}")
+      end
     end
 
     # <Location_X>23.134521</Location_X>
@@ -37,8 +57,6 @@ WeixinRailsMiddleware::WeixinController.class_eval do
     def response_image_message(options={})
       @media_id = @weixin_message.MediaId # 可以调用多媒体文件下载接口拉取数据。
       @pic_url  = @weixin_message.PicUrl  # 也可以直接通过此链接下载图片, 建议使用carrierwave.
-      puts @pic_url
-      puts @media_id
       reply_image_message(generate_image(@media_id))
       # reply_text_message("Your image: #{@pic_url}")
     end
@@ -89,7 +107,8 @@ WeixinRailsMiddleware::WeixinController.class_eval do
     end
 
     # 关注公众账号
-    def handle_subscribe_event
+    def handle_subscribe_event 
+      UserSubscribeJob.perform_later openid
       if @keyword.present?
         # 扫描带参数二维码事件: 1. 用户未关注时，进行关注后的事件推送
         return reply_text_message("扫描带参数二维码事件: 1. 用户未关注时，进行关注后的事件推送, keyword: #{@keyword}")
@@ -114,7 +133,8 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       reply_text_message("Your Location: #{@lat}, #{@lgt}, #{@precision}")
     end
 
-    #点击事件
+    # 点击事件
+    # 签到按钮点击事件
     def handle_click_sign_in_event(weixin_message)
       openid = @weixin_message.FromUserName
       if $redis.sadd('users:sign_in', openid)
@@ -125,7 +145,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
     end
 
     def handle_click_like_event(weixin_message)
-      # 拿到用户ID
+      # 拿到点击用户openID
       openid = @weixin_message.FromUserName
       # 判断用户如果点赞成功,返回文本消息
       if $redis.sadd('users:like_counts', openid)
@@ -142,11 +162,15 @@ WeixinRailsMiddleware::WeixinController.class_eval do
     end
     # 点击联系我们事件：
     def handle_click_connect_us_event(weixin_message)
+      reply_image_message(generate_image("4B6erJvpc5QVRPBaU5rvQlRqbA_5g0aRDHSTyh9B-wCfmo-O25nslS-3iCogk9eR"))
+    end
+    # 点击其他事件：
+    def handle_click_other_event(weixin_message)
+    # 返回图文消息
       article = []
       article << generate_article('title', 'desc', 'https://avatars3.githubusercontent.com/u/37606189?s=40&v=4', 'http://baidu.com')
-      article << generate_article('title', 'desc', 'https://avatars3.githubusercontent.com/u/37606189?s=40&v=4', 'http://baidu.com')
-
-      # 回复图片
+      article << generate_article('第五人格', 'desc', 'https://id5.res.netease.com/pc/fab/20180328150633/img/fl3_07c82cf.png', 'http://id5.163.com/m/fab/')
+      # 回复图文消息
       reply_news_message(article)
       # reply_image_message(generate_image("4B6erJvpc5QVRPBaU5rvQlRqbA_5g0aRDHSTyh9B-wCfmo-O25nslS-3iCogk9eR"))
     end

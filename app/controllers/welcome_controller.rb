@@ -47,10 +47,16 @@ class WelcomeController < ApplicationController
               "key": "CONNECT_US"
             },
             {	
-        	  "type": "click",
-        	  "name": "个人中心",
-        	  "key": "USER"
-            }]
+        	    "type": "click",
+        	    "name": "个人中心",
+        	    "key": "USER"
+            },
+            {
+              "type": "click",
+              "name": "其他",
+              "key": "OTHER"
+
+              }]
      }
        ]
  }
