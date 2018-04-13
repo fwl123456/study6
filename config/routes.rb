@@ -1,6 +1,13 @@
 require 'sidekiq/web'
 Rails.application.routes.draw do
-  resources :posts
+  resources :posts do
+  	member do
+  		post 'favs'
+  	end
+  	collection do
+  		post 'fav'
+  	end
+  end
   resources :users
   get 'welcome/index'
 

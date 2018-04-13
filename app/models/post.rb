@@ -18,7 +18,7 @@ class Post
       {status: -1, notice: '重复点赞'}
     end
   end
-
+  # 查看点赞的所有人
   def likers
     user_ids = $redis.smembers "post:#{self.id.to_s}:likers"
     User.find(user_ids)
