@@ -49,7 +49,12 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       @ly    = @weixin_message.Location_Y
       @scale = @weixin_message.Scale
       @label = @weixin_message.Label
-      reply_text_message("Your Location: #{@lx}, #{@ly}, #{@scale}, #{@label}")
+      article = []
+      article << generate_article('title', 'desc', 'https://avatars3.githubusercontent.com/u/37606189?s=40&v=4', 'http://baidu.com')
+      article << generate_article('新浪', 'desc', 'https://i.loli.net/2018/08/06/5b68056b47417.png', 'https://weibo.com/login.php?sudaref=www.google.com&display=0&retcode=6102')
+      # 回复图文消息
+      reply_news_message(article)
+      # reply_text_message("Your Location: #{@lx}, #{@ly}, #{@scale}, #{@label}")
     end
 
     # <PicUrl><![CDATA[this is a url]]></PicUrl>
@@ -169,7 +174,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
     # 返回图文消息
       article = []
       article << generate_article('title', 'desc', 'https://avatars3.githubusercontent.com/u/37606189?s=40&v=4', 'http://baidu.com')
-      article << generate_article('第五人格', 'desc', 'https://id5.res.netease.com/pc/fab/20180328150633/img/fl3_07c82cf.png', 'http://id5.163.com/m/fab/')
+      article << generate_article('新浪', 'desc', 'https://i.loli.net/2018/08/06/5b68056b47417.png', 'https://weibo.com/login.php?sudaref=www.google.com&display=0&retcode=6102')
       # 回复图文消息
       reply_news_message(article)
       # reply_image_message(generate_image("4B6erJvpc5QVRPBaU5rvQlRqbA_5g0aRDHSTyh9B-wCfmo-O25nslS-3iCogk9eR"))
