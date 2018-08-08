@@ -135,7 +135,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       article << generate_article('新浪', 'desc', 'https://i.loli.net/2018/08/06/5b68056b47417.png', 'https://weibo.com/login.php?sudaref=www.google.com&display=0&retcode=6102')
       # 回复图文消息
       reply_news_message(article)
-      # reply_text_message("Your Location: #{@lat}, #{@lgt}, #{@precision}")
+      #reply_text_message("Your Location: #{@lat}, #{@lgt}, #{@precision}")
     end
 
     # 点击事件
@@ -167,7 +167,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
     end
     # 点击联系我们事件：
     def handle_click_connect_us_event(weixin_message)
-      reply_image_message(generate_image("4B6erJvpc5QVRPBaU5rvQlRqbA_5g0aRDHSTyh9B-wCfmo-O25nslS-3iCogk9eR"))
+      reply_image_message(generate_image("dT3iS-b09AmaSMFvgusPUcC3qJyLp86Z8uEYuh1foHBo8kRzzufcZ_37B8EWitcA"))
     end
     # 点击其他事件：
     def handle_click_other_event(weixin_message)
