@@ -49,12 +49,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       @ly    = @weixin_message.Location_Y
       @scale = @weixin_message.Scale
       @label = @weixin_message.Label
-      article = []
-      article << generate_article('title', 'desc', 'https://avatars3.githubusercontent.com/u/37606189?s=40&v=4', 'http://baidu.com')
-      article << generate_article('新浪', 'desc', 'https://i.loli.net/2018/08/06/5b68056b47417.png', 'https://weibo.com/login.php?sudaref=www.google.com&display=0&retcode=6102')
-      # 回复图文消息
-      reply_news_message(article)
-      # reply_text_message("Your Location: #{@lx}, #{@ly}, #{@scale}, #{@label}")
+      reply_text_message("Your Location: #{@lx}, #{@ly}, #{@scale}, #{@label}")
     end
 
     # <PicUrl><![CDATA[this is a url]]></PicUrl>
@@ -135,7 +130,12 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       @lat = @weixin_message.Latitude
       @lgt = @weixin_message.Longitude
       @precision = @weixin_message.Precision
-      reply_text_message("Your Location: #{@lat}, #{@lgt}, #{@precision}")
+      article = []
+      article << generate_article('title', 'desc', 'https://avatars3.githubusercontent.com/u/37606189?s=40&v=4', 'http://baidu.com')
+      article << generate_article('新浪', 'desc', 'https://i.loli.net/2018/08/06/5b68056b47417.png', 'https://weibo.com/login.php?sudaref=www.google.com&display=0&retcode=6102')
+      # 回复图文消息
+      reply_news_message(article)
+      # reply_text_message("Your Location: #{@lat}, #{@lgt}, #{@precision}")
     end
 
     # 点击事件
